@@ -11,9 +11,9 @@ $config = [
         ],
         'router' => [ // подсистема маршрутизация
             'class' => \ItForFree\SimpleMVC\Router::class,
-	    'alias' => '@router'
+            'alias' => '@router'
         ],
-        'url' => [ 
+        'url' => [
             'class' => \ItForFree\SimpleMVC\Url::class
         ],
         'mvc' => [ // настройки MVC
@@ -25,23 +25,30 @@ $config = [
             ]
         ],
         'handlers' => [ // подсистема перехвата исключений
-            'ItForFree\SimpleMVC\exceptions\SmvcAccessException' 
-		=> \application\handlers\UserExceptionHandler::class,
-            'ItForFree\SimpleMVC\exceptions\SmvcRoutingException' 
-		=> \application\handlers\UserExceptionHandler::class
+            'ItForFree\SimpleMVC\exceptions\SmvcAccessException'
+            => \application\handlers\UserExceptionHandler::class,
+            'ItForFree\SimpleMVC\exceptions\SmvcRoutingException'
+            => \application\handlers\UserExceptionHandler::class
+        ],
+        'article' => [
+            'class' => \application\models\Article::class,
+            'construct' => [
+                'tableName' => 'articles',
+                'orderBy' => 'id',
+            ],
         ],
         'user' => [ // подсистема авторизации
             'class' => \application\models\ExampleUser::class,
-	    'construct' => [
+            'construct' => [
                 'session' => '@session',
                 'router' => '@router'
-             ], 
+            ],
         ],
         'session' => [ // подсистема работы с сессиями
             'class' => ItForFree\SimpleMVC\Session::class,
             'alias' => '@session'
         ]
-    ]    
+    ]
 ];
 
 return $config;

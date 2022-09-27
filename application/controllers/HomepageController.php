@@ -10,10 +10,16 @@ use ItForFree\SimpleMVC\Config;
  */
 class HomepageController extends \ItForFree\SimpleMVC\mvc\Controller
 {
+
     /**
      * @var string Название страницы
      */
     public $homepageTitle = "Статьи";
+
+    /**
+     * @var string Название страницы архива
+     */
+    public $archiveTitle = "Архив статей";
 
     /**
      * @var array Список статей
@@ -30,11 +36,18 @@ class HomepageController extends \ItForFree\SimpleMVC\mvc\Controller
      */
     public function indexAction()
     {
-        $this->articles = Config::getObject('core.article.class')->getList();
-
-        $this->view->addVar('homepageTitle', $this->homepageTitle); // передаём переменную по view
-        $this->view->addVar('articles', $this->articles); // передаём переменную по view
-        $this->view->render('homepage/index.php');
+        $currentRole = Config::getObject('core.user.class');
+        if (isset($_GET['archive'])) {
+            $this->articles = Config::getObject('core.article.class')->getListByAccess();
+            $this->view->addVar('homepageTitle', $this->archiveTitle); // передаём переменную по view
+            $this->view->addVar('articles', $this->articles); // передаём переменную по view
+            $this->view->render('homepage/archive.php');
+        } else {
+            $this->articles = Config::getObject('core.article.class')->getListByAccess($numRows = 5);
+            $this->view->addVar('homepageTitle', $this->homepageTitle); // передаём переменную по view
+            $this->view->addVar('articles', $this->articles); // передаём переменную по view
+            $this->view->render('homepage/index.php');
+        }
     }
 }
 

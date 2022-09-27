@@ -91,7 +91,7 @@ class ExampleUser extends \ItForFree\SimpleMVC\User
      */
     public function getId()
     {
-        if ($this->userName !== 'guest'){
+        if ($this->userName !== 'default'){
             $sql = "SELECT id FROM users where login = :userName";
             $st = $this->pdo->prepare($sql); 
             $st -> bindValue( ":userName", $this->userName, \PDO::PARAM_STR );
@@ -111,14 +111,14 @@ class ExampleUser extends \ItForFree\SimpleMVC\User
      */
     protected function getRoleByUserName($userName)
     {
-        $sql = "SELECT role FROM users WHERE login = :login";
+        $sql = "SELECT a.role, a.id, users.id as 'user_id' FROM users LEFT JOIN access a ON a.id = users.access_id WHERE login = :login";
         $st = $this->pdo->prepare($sql);
         $st->bindValue( ":login", $userName, \PDO::PARAM_STR);
         $st->execute();
         
         $siteAuthData = $st->fetch();
-        if (isset($siteAuthData['role'])) {
-            return $siteAuthData['role'];
+        if (isset($siteAuthData['role']) && isset($siteAuthData['id'])) {
+            return [$siteAuthData['role'], $siteAuthData['id'], $siteAuthData['user_id']];
         }
     }
     
@@ -169,4 +169,9 @@ class ExampleUser extends \ItForFree\SimpleMVC\User
         $st->bindValue( ":id", $this->id, \PDO::PARAM_INT );
         $st->execute();
     }
+
+    public function getUsernameList() {
+        return parent::getList(select: "id, login");
+    }
+
 }

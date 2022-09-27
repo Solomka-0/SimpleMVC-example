@@ -30,7 +30,25 @@ $User = Config::getObject('core.user.class');
             <a class="nav-link" href="<?= Url::link("admin/adminusers/index") ?>"> Пользователи </a>
         </li>
         <?php endif; ?>
-        
+
+        <?php  if ($User->isAllowed("admin/adminArticles/index")): ?>
+            <li class="nav-item ">
+                <a class="nav-link" href="<?= Url::link("admin/adminArticles/index") ?>"> Статьи </a>
+            </li>
+        <?php endif; ?>
+
+        <?php  if ($User->isAllowed("admin/adminCategories/index")): ?>
+            <li class="nav-item ">
+                <a class="nav-link" href="<?= Url::link("admin/adminCategories/index") ?>"> Категории </a>
+            </li>
+        <?php endif; ?>
+
+        <?php  if ($User->isAllowed("admin/adminSubcategories/index")): ?>
+            <li class="nav-item ">
+                <a class="nav-link" href="<?= Url::link("admin/adminSubcategories/index") ?>"> Подкатегории </a>
+            </li>
+        <?php endif; ?>
+
         <?php  if ($User->isAllowed("admin/adminusers/index")): ?>
         <li class="nav-item ">
             <a class="nav-link" href="<?= Url::link("admin/notes/index") ?>"> Заметки </a>

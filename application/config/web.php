@@ -37,11 +37,39 @@ $config = [
                 'orderBy' => 'id',
             ],
         ],
+        'category' => [
+            'class' => \application\models\Category::class,
+            'construct' => [
+                'tableName' => 'categories',
+                'orderBy' => 'id',
+            ]
+        ],
+        'subcategory' => [
+            'class' => \application\models\Subcategory::class,
+            'construct' => [
+                'tableName' => 'subcategories',
+                'orderBy' => 'id',
+            ]
+        ],
+        'access' => [
+            'class' => \application\models\Access::class,
+            'construct' => [
+                'tableName' => 'access',
+                'orderBy' => 'id',
+            ]
+        ],
         'user' => [ // подсистема авторизации
             'class' => \application\models\ExampleUser::class,
             'construct' => [
                 'session' => '@session',
                 'router' => '@router'
+            ],
+        ],
+        'likes' => [ // подсистема авторизации
+            'class' => \application\models\Likes::class,
+            'construct' => [
+                'tableName' => 'likes',
+                'orderBy' => 'access_id',
             ],
         ],
         'session' => [ // подсистема работы с сессиями

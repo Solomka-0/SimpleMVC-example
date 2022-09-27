@@ -11,7 +11,11 @@ class AjaxController extends \ItForFree\SimpleMVC\mvc\Controller
      */
     public function likeAction()
     {
-       echo 'привет!';
-    }   
+        include($this->view->templateBasepath . 'ajax/like.php');
+    }
+
+    public function getSubcategoryAction() {
+        include($this->view->templateBasepath . 'ajax/getSubcategory.php');
+    }
 }
 

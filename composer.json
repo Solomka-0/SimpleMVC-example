@@ -1,7 +1,9 @@
 {
     "require": {
         "it-for-free/simple-mvc": "dev-master",
-        "it-for-free/rusphp": "v2.*"      
+        "it-for-free/rusphp": "v2.*",
+      "ext-pdo": "*",
+      "ext-mbstring": "*"
     },
     "minimum-stability" : "dev",
     "repositories": [

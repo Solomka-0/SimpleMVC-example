@@ -73,8 +73,6 @@ class ExampleUser extends \ItForFree\SimpleMVC\User
         $pass .= $siteAuthData['salt'];
         $passForCheck = password_verify($pass, $siteAuthData['pass']);
 
-//        $passForCheck = true;
-
         if (isset($siteAuthData['pass'])) {
             if ($passForCheck) {
                 $result = true;

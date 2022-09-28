@@ -6,6 +6,8 @@ use ItForFree\SimpleMVC\Url;
 
 DemoJavascriptAsset::add();
 $user_id = $_SESSION['user']['id'] ?? null;
+$user_login = $_SESSION['user']['userName'];
+$User = Config::getObject('core.user.class');
 
 ?>
 
@@ -14,11 +16,30 @@ $user_id = $_SESSION['user']['id'] ?? null;
         /*background: black;*/
         content: url("<?= \ItForFree\SimpleAsset\SimpleAssetManager::$assetsPath . '/../images/like_filled.png' ?>");
     }
+
     .like[is-active="false"] {
         /*height: 10px;*/
         /*width: 10px;*/
         content: url("<?= \ItForFree\SimpleAsset\SimpleAssetManager::$assetsPath . '/../images/like_empty.png' ?>");
     }
+
+    img.like:hover ~ div.like-label {
+        visibility: visible;
+        position: absolute;
+        color: white;
+        margin-left: 94%;
+        margin-top: -5%;
+        background: grey;
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    img.like ~ div.like-label {
+        visibility: hidden;
+        position: absolute;
+
+    }
+
 </style>
 <script>
     $(document).ready(function () {
@@ -44,12 +65,25 @@ $user_id = $_SESSION['user']['id'] ?? null;
                 $.ajax({
                     url: url,
                     type: 'POST',
-                    data: {article_id: this.parentElement.id, user_id: <?=$user_id?>},
+                    data: {article_id: this.parentElement.parentElement.id, user_id: <?=$user_id?>},
                     dataType: 'html',
                 })
+                let counterTag = this.parentElement.getElementsByClassName("likes-counter").item(0);
+                let usersTag = this.parentElement.getElementsByClassName("like-label").item(0);
+                let counterText = counterTag.textContent;
                 if (this.getAttribute("is-active") == "true") {
+                    usersTag.innerHTML = usersTag.innerHTML.replace("<?=$user_login?><br>", "");
+                    if (usersTag.textContent.trim() == '') {
+                        usersTag.setAttribute("hidden", "true");
+                    }
+                    counterTag.textContent = Number(counterText) - 1;
                     this.setAttribute("is-active", "false");
                 } else {
+                    usersTag.innerHTML = "<?=$user_login?><br>" + usersTag.textContent;
+                    if (usersTag.textContent.trim() != '') {
+                        usersTag.removeAttribute("hidden");
+                    }
+                    counterTag.textContent = Number(counterText) + 1;
                     this.setAttribute("is-active", "true");
                 }
             }
@@ -90,10 +124,30 @@ $user_id = $_SESSION['user']['id'] ?? null;
                              style="font-family: 'sans-serif'; font-size: 18px; padding: 10px;"><?= $article->content ?></div>
                         <?php $like_source = in_array($user_id, $article->likes) ?
                             'is-active=true'
-                            : 'is-active=false';
-                        ;?>
-                        <img class="like" <?=$like_source?>
-                                style="height: 25px; z-index: <?= count($articles['results']) - $index + 1 ?>; margin: 10px; margin-left: 94% ">
+                            : 'is-active=false';; ?>
+                        <div>
+                            <div class="likes-counter" style="position: absolute; margin-left: 90%; margin-top: 10px"><?=count($article->likes)?></div>
+                            <img class="like" <?= $like_source ?>
+                                 style="height: 25px; z-index: <?= count($articles['results']) - $index + 1 ?>; margin: 10px; margin-left: 94% ">
+                            <div class="like-label bg-dark" <?php
+                            $result = '>';
+                            $counter = 0;
+                            foreach ($article->likes as $user_id) {
+                                if ($counter < 8) {
+                                    $counter++;
+                                } else {
+                                    $result .= "...";
+                                    break;
+                                }
+                                echo $user_id;
+                                $result .= $User->getById($user_id)->login . "<br>";
+                            }
+
+                            $result = $counter == 0 ? 'hidden' . $result : $result;
+                            echo $result;
+                            ?>
+                            </div>
+                        </div>
                         <div class="label" state="close"
                              style="background: white; height: 20px; width: 40px; margin-left: auto; margin-right: auto;
                                      left: 0; margin-top: -8px; right: 0; z-index: <?= -$index + 1 ?>; position: absolute; text-align: center">

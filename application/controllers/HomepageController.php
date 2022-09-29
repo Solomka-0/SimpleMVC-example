@@ -37,15 +37,25 @@ class HomepageController extends \ItForFree\SimpleMVC\mvc\Controller
     public function indexAction()
     {
         $currentRole = Config::getObject('core.user.class');
+        $page = $_GET['page'] ?? "1";
+        include($this->view->templateBasepath . 'homepage/includes/paginationPanel.php');
+        $Article = Config::getObject('core.article.class');
+        $count = $Article->getCount();
         if (isset($_GET['archive'])) {
-            $this->articles = Config::getObject('core.article.class')->getListByAccess();
+            $offset = 8;
+            $paginationPanel = paginationPanel($count, $offset, $page);
+            $this->articles = $Article->getListByAccess($numRows = $offset, ($page - 1) * $offset);
             $this->view->addVar('homepageTitle', $this->archiveTitle); // передаём переменную по view
             $this->view->addVar('articles', $this->articles); // передаём переменную по view
+            $this->view->addVar('paginationPanel', $paginationPanel); // передаём переменную по view
             $this->view->render('homepage/archive.php');
         } else {
-            $this->articles = Config::getObject('core.article.class')->getListByAccess($numRows = 5);
+            $offset = 5;
+            $paginationPanel = paginationPanel($count, $offset ,$page);
+            $this->articles = $Article->getListByAccess($numRows = $offset, ($page - 1) * $offset);
             $this->view->addVar('homepageTitle', $this->homepageTitle); // передаём переменную по view
             $this->view->addVar('articles', $this->articles); // передаём переменную по view
+            $this->view->addVar('paginationPanel', $paginationPanel); // передаём переменную по view
             $this->view->render('homepage/index.php');
         }
     }

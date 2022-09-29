@@ -32,6 +32,9 @@ DemoJavascriptAsset::add();
 <div class="row">
     <div class="col">
         <div style="display: flex; align-items: center;flex-direction: column; row-gap: 12px">
+            <?php echo $paginationPanel?>
+            <br>
+
             <?php foreach ($articles['results'] as $index=>$article) { ?>
                 <div style="width: 100%; margin: -12px; z-index: <?= count($articles['results']) - $index ?>; display: flex; flex-direction: column">
                     <article
@@ -72,6 +75,8 @@ DemoJavascriptAsset::add();
                     </div>
                 </div>
             <?php } ?>
+            <br>
+            <?php echo $paginationPanel?>
             <a href="<?= Url::link('homepage/index') ?>" style="padding: 10px 20px 20px 10px; align-self: start">На главную</a>
         </div>
     </div>
